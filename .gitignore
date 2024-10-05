@@ -1,0 +1,9 @@
+# Ignore everything in auth folder
+auth/*
+!auth/example.yaml
+
+logs
+venv
+file_tree*
+__pycache__
+output

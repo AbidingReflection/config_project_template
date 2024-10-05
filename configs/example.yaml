@@ -1,0 +1,10 @@
+qTest Domain: https://apitryout.qtestnet.com/
+Authentication Path: auth\example.yaml
+
+Target Projects:
+  - 123456
+  - 234567
+
+
+
+Max Concurrent Requests: 1
