@@ -31,12 +31,10 @@ class ConfigValidator:
         # Normalize the keys for consistency
         self.rules = {normalize_key(key): value for key, value in self.rules.items()}
 
-
     def dump_config_to_yaml(self, output_path: Path) -> None:
         """Dump the config dictionary as a nicely formatted YAML file."""
         with output_path.open('w') as f:
             yaml.dump(self.config, f, default_flow_style=False, sort_keys=False)
-
 
     def validate(self) -> None:
         """Run validation on the config."""
@@ -59,10 +57,10 @@ class ConfigValidator:
                 self.errors.append(f"Missing required config key: '{key}'")
                 continue  # Skip further validation if missing
 
-            # Ensure validation rules are supplied
+            # Skip keys that don't have validation rules
             validators = rule.get('validation', None)
-            if validators is None or len(validators) == 0:
-                raise ValueError(f"No validation rules supplied for config key: '{key}'")
+            if not validators:
+                continue  # No validation rules, skip this key
 
             # Run each validation rule if the field exists
             if value is not None:
@@ -89,9 +87,6 @@ class ConfigValidator:
 
         if self.errors:
             raise ValueError("\n".join(self.errors))
-
-
-
 
     @staticmethod
     def validate_https_url(key: str, value: str) -> None:
@@ -168,7 +163,6 @@ class ConfigValidator:
         if not path.exists():
             raise ValueError(f"Config key '{key}' must be an existing path. Provided path '{value}' does not exist.")
 
-
     @staticmethod
     def validate_str_is_valid_path(key: str, value: str) -> None:
         """Validate that the string is a valid path format (relative or absolute)."""
@@ -180,13 +174,11 @@ class ConfigValidator:
         except Exception as e:
             raise ValueError(f"Config key '{key}' must be a valid path string. Error: {e}")
 
-
     @staticmethod
     def validate_option(key: str, value: str, allowed_values: List[str]) -> None:
         """Validate that the value is one of the allowed options."""
         if value not in allowed_values:
             raise ValueError(f"Config key '{key}' contains an invalid value '{value}'. Allowed values are: {allowed_values}")
-
 
     @staticmethod
     def validate_int_list(key: str, value: Any) -> None:
@@ -198,7 +190,6 @@ class ConfigValidator:
         
         if non_int_items:
             raise ValueError(f"Config key '{key}' must contain only integers. Found non-integer items: {non_int_items}")
-
 
     @staticmethod
     def validate_int_list_digits(key: str, value: Any, digits: int) -> None:

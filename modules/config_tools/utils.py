@@ -1,3 +1,4 @@
+import re
 import json
 import logging
 from datetime import date, datetime
@@ -32,7 +33,12 @@ class CustomJSONEncoder(json.JSONEncoder):
 
 
 def normalize_key(key: str) -> str:
-    """Normalize each key by lowercasing the first character of each word (separated by spaces or underscores)."""
-    parts = key.strip().replace("_", " ").split()  # Replace underscores with spaces, then split by spaces
-    normalized_parts = [part[0].lower() + part[1:] if part else part for part in parts]  # Lowercase first char
-    return "_".join(normalized_parts)  # Join with underscores
+    """Normalize each key by lowercasing the first character of each word and handling special cases."""
+    # Strip leading/trailing whitespace and replace multiple underscores/spaces with a single space
+    key = re.sub(r"[_\s]+", " ", key.strip())
+    
+    # Split by spaces, lowercase first letter of each part, and join with underscores
+    parts = key.split()
+    normalized_parts = [part[0].lower() + part[1:] if part else part for part in parts]
+    
+    return "_".join(normalized_parts)

@@ -24,12 +24,9 @@ class ConfigLoader:
                 if not self.rule_path.is_dir():
                     raise ValueError(f"Provided rules path {self.rule_path} is not a valid directory.")
                 
-                # Load both config_rules and auth_rules from the given directory
                 self.config_rules, self.auth_rules = self.load_rules(rules_dir)
             else:
                 self.config_rules, self.auth_rules = self.load_rules()
-
-
 
             log_path = self.get_log_path()
             log_name_prefix = self.get_log_name_prefix()
@@ -47,13 +44,15 @@ class ConfigLoader:
                 self.load_authentication_config(auth_path)
                 self.logger.info(f"Authentication config loaded from '{auth_path}'")
 
-                # self.config['config_validation_rules'] = self.config_rules
-                # self.config['auth_validation_rules'] = self.auth_rules
+
+                if 'include_config_rules_in_output' in self.config:
+                    self.config['config_validation_rules'] = self.config_rules
+                    self.config['auth_validation_rules'] = self.auth_rules
+                    
                 self.logger.info(f'Config loaded successfully. Loaded config:\n {json.dumps(self.config, indent=4, cls=CustomJSONEncoder)}')
 
         except (FileNotFoundError, IsADirectoryError, ValueError, yaml.YAMLError) as e:
             raise e
-
 
     def load_rules(self, rules_dir: Optional[Union[str, Path]] = None) -> Tuple[Dict, Dict]:
         """Load both config_rules and auth_rules from the specified directory, defaults to 'configs/validation/'."""
@@ -81,7 +80,6 @@ class ConfigLoader:
             self.logger.warning(f"auth_rules.yaml not found at {auth_rules_path}")
         
         return config_rules, auth_rules
-
 
     def get_config(self) -> Dict:
         """Return the loaded configuration."""
@@ -142,7 +140,7 @@ class ConfigLoader:
         """Validate the config using the provided config_rules."""
         try:
             validator = ConfigValidator(config, None)
-            validator.rules = self.config_rules  # Set the config_rules loaded earlier
+            validator.rules = self.config_rules
             validator.validate()
         except ValueError as e:
             self.logger.error(f"Config validation error: {e}")
@@ -160,6 +158,6 @@ class ConfigLoader:
             self.logger.info("Authentication data loaded into config")
 
         validator = ConfigValidator(self.config['auth'].get_data(), None)
-        validator.rules = self.auth_rules  # Set the auth_rules loaded earlier
+        validator.rules = self.auth_rules
         validator.validate()
         self.logger.info("Authentication data validated successfully")

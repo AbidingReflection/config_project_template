@@ -43,3 +43,6 @@ target_projects:
     - validate_int_list
     - validate_int_list_digits:
         digits: 6
+
+include_config_rules_in_output:
+  required: false

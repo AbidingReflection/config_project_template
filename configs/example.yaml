@@ -6,12 +6,7 @@ Target Projects:
   - 589654
   - 123456
 
-
-
 Max Concurrent Requests: 1
-
-
 output_filetype: sqlite
 
-
-# really_rew: 69
+# include_config_rules_in_output: true
