@@ -1,0 +1,4 @@
+qTest_bearer_token:
+  required: true
+  validation:
+    - validate_qTest_bearer_token

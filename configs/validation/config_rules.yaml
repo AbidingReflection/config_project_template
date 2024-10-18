@@ -1,0 +1,45 @@
+authentication_path:
+  required: true
+  validation:
+    - validate_is_existing_path
+    - validate_str_is_valid_path
+
+qTest_domain:
+  required: true
+  validation:
+    - validate_https_url
+
+max_concurrent_requests:
+  required: true
+  validation:
+    - validate_int_range:
+        min_value: 1
+        max_value: 10
+
+output_filetype:
+  required: true
+  validation:
+    - validate_option:
+        allowed_values:
+          - sqlite
+          - excel
+          - csv
+
+retry_attempts:
+  required: false
+  validation:
+    - validate_int_range:
+        lower_limit: 0
+        upper_limit: 10
+
+log_name_prefix:
+  required: false
+  validation:
+    - validate_log_prefix
+
+target_projects:
+  required: true
+  validation:
+    - validate_int_list
+    - validate_int_list_digits:
+        digits: 6

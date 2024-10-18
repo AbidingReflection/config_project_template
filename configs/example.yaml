@@ -2,9 +2,16 @@ qTest Domain: https://apitryout.qtestnet.com/
 Authentication Path: auth\example.yaml
 
 Target Projects:
+  - 125598
+  - 589654
   - 123456
-  - 234567
 
 
 
 Max Concurrent Requests: 1
+
+
+output_filetype: sqlite
+
+
+# really_rew: 69

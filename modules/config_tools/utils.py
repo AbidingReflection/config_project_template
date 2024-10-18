@@ -29,3 +29,10 @@ class CustomJSONEncoder(json.JSONEncoder):
         if isinstance(obj, (date, datetime)):
             return obj.strftime("%Y-%m-%d")
         return super().default(obj)
+
+
+def normalize_key(key: str) -> str:
+    """Normalize each key by lowercasing the first character of each word (separated by spaces or underscores)."""
+    parts = key.strip().replace("_", " ").split()  # Replace underscores with spaces, then split by spaces
+    normalized_parts = [part[0].lower() + part[1:] if part else part for part in parts]  # Lowercase first char
+    return "_".join(normalized_parts)  # Join with underscores
