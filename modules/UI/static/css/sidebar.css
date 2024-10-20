@@ -1,0 +1,47 @@
+/* Container for the navigation and content */
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 96vh; /* Full viewport height */
+}
+
+/* Left navigation styling */
+.left-nav {
+    width: 200px;
+    padding: 20px;
+    background-color: #222222; /* Dark background for sidebar */
+    color: #e7e6e4; /* Light text color for sidebar */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensures content stays at the top and bottom */
+    box-sizing: border-box; /* Include padding in width/height calculation */
+}
+
+/* Remove default list styling */
+.left-nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Add space between buttons */
+.left-nav li {
+    margin-bottom: 10px;
+}
+
+/* Styling for the buttons */
+.nav-button {
+    display: block;
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue button background */
+    color: #e7e6e4; /* Light text color for buttons */
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    /* transition: background-color 0.3s ease; */
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.nav-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
