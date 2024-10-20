@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>View Configurations</h1>
+<ul>
+    <!-- Loop over available configs and display them -->
+    {% for config in configs %}
+    <li>{{ config.name }} - <a href="{{ url_for('edit_config', config_id=config.id) }}">Edit</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

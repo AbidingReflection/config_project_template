@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        input, select, textarea {
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-group label {
+            font-weight: normal;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Configuration Form</h2>
+        <form action="/submit_config" method="POST">
+            <!-- Text Input -->
+            <label for="project_name">Project Name</label>
+            <input type="text" id="project_name" name="project_name" placeholder="Enter project name" required>
+
+            <!-- Select Input -->
+            <label for="log_level">Log Level</label>
+            <select id="log_level" name="log_level">
+                <option value="DEBUG">DEBUG</option>
+                <option value="INFO">INFO</option>
+                <option value="WARNING">WARNING</option>
+                <option value="ERROR">ERROR</option>
+                <option value="CRITICAL">CRITICAL</option>
+            </select>
+
+            <!-- Text Area -->
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4" placeholder="Enter project description"></textarea>
+
+            <!-- Checkbox Input -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="enable_feature_x" name="enable_feature_x">
+                <label for="enable_feature_x">Enable Feature X</label>
+            </div>
+
+            <!-- File Input -->
+            <label for="config_file">Upload Config File</label>
+            <input type="file" id="config_file" name="config_file">
+
+            <!-- Submit Button -->
+            <button type="submit">Submit Configuration</button>
+        </form>
+    </div>
+</body>
+</html>

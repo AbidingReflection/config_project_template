@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+}
+
+.left-nav {
+    width: 200px;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+.left-nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.left-nav li {
+    margin-bottom: 10px;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.menu-buttons button {
+    display: block;
+    margin: 10px 0;
+    padding: 10px 20px;
+    font-size: 16px;
+}

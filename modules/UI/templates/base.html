@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="left-nav">
+            <ul>
+                <li><a href="{{ url_for('main_menu') }}">Main Menu</a></li>
+                <li><a href="{{ url_for('new_config') }}">New Config</a></li>
+                <li><a href="{{ url_for('edit_config') }}">Edit Config</a></li>
+                <li><a href="{{ url_for('view_configs') }}">View Configs</a></li>
+                <li><a href="{{ url_for('execute_config') }}">Execute Config</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            {% block content %}
+            <!-- Content for each page goes here -->
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>
