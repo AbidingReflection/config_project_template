@@ -3,7 +3,7 @@ Authentication Path: auth\example.yaml
 
 Target Projects:
   - 125598
-  - 589654
+  - 588654
   - 123456
 
 Max Concurrent Requests: 1

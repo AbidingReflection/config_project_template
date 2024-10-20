@@ -3,11 +3,11 @@ import re
 from datetime import datetime, timezone
 
 def extract_number(entry):
+    """Extract leading number for sorting, default to infinity if none found."""
     match = re.match(r'^(\d+)', entry)
     if match:
-        return int(match.group(1))  # Extract and return leading number if present
-    return float('inf')  # Sort entries without numbers later
-
+        return int(match.group(1))
+    return float('inf')
 
 def delete_existing_file_trees(output_prefix):
     """Delete existing file trees matching the output_path prefix."""
@@ -21,17 +21,13 @@ def delete_existing_file_trees(output_prefix):
             except OSError as e:
                 print(f"Error deleting file {file_path}: {e}")
 
-
 def generate_file_tree(target_path, output_path, exclude_prefixes=None, exclude_suffixes=None, exclude_filetypes=None, exclude_folders=None, delete_existing=False):
-    if exclude_prefixes is None:
-        exclude_prefixes = []
-    if exclude_suffixes is None:
-        exclude_suffixes = []
-    if exclude_filetypes is None:
-        exclude_filetypes = []
-    if exclude_folders is None:
-        exclude_folders = []
-    
+    """Generate file tree for target_path and output results to output_path."""
+    exclude_prefixes = exclude_prefixes or []
+    exclude_suffixes = exclude_suffixes or []
+    exclude_filetypes = exclude_filetypes or []
+    exclude_folders = exclude_folders or []
+
     if delete_existing:
         delete_existing_file_trees(output_path)
     
@@ -44,7 +40,6 @@ def generate_file_tree(target_path, output_path, exclude_prefixes=None, exclude_
         file.write(f"Exclude Prefixes: {', '.join([f'\'{prefix}\'' for prefix in exclude_prefixes])}\n")
         file.write(f"Exclude Suffixes: {', '.join([f'\'{suffix}\'' for suffix in exclude_suffixes])}\n")
         file.write(f"Exclude Filetypes: {', '.join([f'\'{filetype}\'' for filetype in exclude_filetypes])}\n")
-
         file.write(f"Exclude Folders: {', '.join([f'\'{folder}\'' for folder in exclude_folders])}\n\n")
         
         file.write(f"{os.path.basename(target_path)}/\n")
@@ -52,7 +47,7 @@ def generate_file_tree(target_path, output_path, exclude_prefixes=None, exclude_
         def walk_directory(current_path, prefix="│   "):
             try:
                 entries = sorted(os.listdir(current_path), key=lambda entry: (extract_number(entry), entry))
-                entries = [e for e in entries if os.path.basename(e) not in exclude_folders]  # Skip excluded folders
+                entries = [e for e in entries if os.path.basename(e) not in exclude_folders]
                 
                 for i, entry in enumerate(entries):
                     full_path = os.path.join(current_path, entry)
@@ -70,15 +65,20 @@ def generate_file_tree(target_path, output_path, exclude_prefixes=None, exclude_
                             continue
                         file.write(f"{prefix}{connector} {entry}\n")
             except PermissionError:
-                # Handle Permission Denied for both last and non-last items
                 connector = "└──" if prefix.endswith("└──") else "├──"
                 file.write(f"{prefix}{connector} [Permission Denied]\n")
 
         walk_directory(target_path)
 
-# Example usage
-target_path = r"C:\Users\decjg\projects\project_template_update\config_project_template"
-output_file_name = r"C:\Users\decjg\projects\project_template_update\config_project_template\scripts\output\file_tree"
+current_dir = os.path.dirname(os.path.abspath(__file__))
+target_path = os.path.abspath(os.path.join(current_dir, os.pardir))
+
+output_dir = os.path.join(current_dir, 'output')
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+output_file_name = os.path.join(output_dir, 'file_tree')
+
 exclude_prefixes = ["file_tree_"]
 exclude_suffixes = []
 exclude_filetypes = []
