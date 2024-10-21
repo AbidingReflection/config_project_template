@@ -166,6 +166,13 @@ async function populateConfigTemplate() {
         form.appendChild(sectionContainer);
         form.appendChild(document.createElement('hr'));  // Horizontal line between sections
     }
+
+    // Step 3: Create and append the "Save Config" button
+    const saveButton = document.createElement('button');
+    saveButton.type = 'submit';
+    saveButton.textContent = 'Save Config';
+    saveButton.classList.add('save-config-button');
+    form.appendChild(saveButton);
 }
 
 // Helper function to capitalize text
