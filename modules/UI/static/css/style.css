@@ -5,9 +5,94 @@ html, body {
     border-color: #706b64;      /* Border color */
 }
 
+/* Styling for the main container */
+.container {
+    display: flex;
+}
+
+/* Styling for the content area */
 .content {
     flex-grow: 1;
     padding: 20px;
     background-color: #191a1a; /* Dark background for content */
     color: #e7e6e4;            /* Light text color for content */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;    /* Align content to the left */
+}
+
+/* Styling for the form container */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    width: 100%;               /* Make form take the available width */
+    padding: 20px;
+    background-color: #1f1f1f;  /* Dark background for form */
+    border: 1px solid #706b64;  /* Updated border color to match dark theme */
+    border-radius: 5px;
+    color: #e7e6e4;             /* Light text color for the form */
+    margin-right: auto;         /* Hug the left */
+}
+
+/* Styling for each label/input pair */
+.field-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+/* Styling for the labels */
+.field-container label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #e7e6e4; /* Light text color for labels */
+}
+
+/* Styling for inputs (text inputs, dropdowns) */
+.field-container input,
+.field-container select {
+    padding: 8px;
+    font-size: 1em;
+    border: 1px solid #555; /* Darker border for inputs */
+    background-color: #333; /* Dark background for inputs */
+    color: #e7e6e4;         /* Light text color for inputs */
+    border-radius: 4px;
+}
+
+/* Styling for inputs on focus */
+.field-container input:focus,
+.field-container select:focus {
+    outline: none;
+    border-color: #4CAF50;  /* Green border on focus */
+}
+
+/* Button styling */
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #4CAF50;
+    color: #e7e6e4; /* Light text color for button */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Styling for disabled buttons */
+button:disabled {
+    background-color: #555;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+/* Sidebar navigation */
+.left-nav {
+    width: 200px;
+    background-color: #2d2d2d;
+    padding: 20px;
+    border-right: 1px solid #706b64;
 }

@@ -3,11 +3,14 @@ authentication_path:
   validation:
     - validate_is_existing_path
     - validate_str_is_valid_path
+  tags:
+    - authentication_file_lookup
 
 qTest_domain:
   required: true
   validation:
     - validate_https_url
+  default: "https://"
 
 max_concurrent_requests:
   required: true
@@ -15,6 +18,7 @@ max_concurrent_requests:
     - validate_int_range:
         min_value: 1
         max_value: 10
+  default: 5
 
 output_filetype:
   required: true
@@ -31,11 +35,13 @@ retry_attempts:
     - validate_int_range:
         lower_limit: 0
         upper_limit: 10
+  default: 0
 
 log_name_prefix:
   required: false
   validation:
     - validate_log_prefix
+  default: "qTest_export_"
 
 target_projects:
   required: true
@@ -43,6 +49,14 @@ target_projects:
     - validate_int_list
     - validate_int_list_digits:
         digits: 6
+  tags:
+    - accept_multiple_values
 
 include_config_rules_in_output:
   required: false
+  validation:
+    - validate_option:
+        allowed_values:
+          - true
+          - false
+  default: "false"

@@ -2,8 +2,10 @@
 
 {% block content %}
 <h1>Create a New Config</h1>
-<form method="post" action="/submit_new_config">
-    <!-- Add form fields for new config creation -->
-    <button type="submit">Save Config</button>
+<form id="config-form" method="post" action="/submit_new_config">
+    <!-- The form will be populated dynamically via JS -->
 </form>
+<button type="submit" form="config-form">Save Config</button>
+
+<script src="/static/js/populate_config_template.js"></script>
 {% endblock %}
