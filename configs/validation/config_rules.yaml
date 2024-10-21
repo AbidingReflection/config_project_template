@@ -63,7 +63,8 @@ include_config_rules_in_output:
   section: Output Settings
   section_order: 3
 
-  max_concurrent_requests:
+
+max_concurrent_requests:
   required: true
   validation:
     - validate_int_range:

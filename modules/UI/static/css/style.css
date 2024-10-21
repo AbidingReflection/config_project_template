@@ -133,3 +133,19 @@ button:disabled {
     color: #aaa;
     cursor: not-allowed;
 }
+
+
+/* Styling for the error pop-up */
+.popup-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #f44336; /* Red background for error */
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    opacity: 0.9;
+}

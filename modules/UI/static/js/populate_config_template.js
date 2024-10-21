@@ -115,6 +115,16 @@ async function populateConfigTemplate() {
                 if (rules.default) {
                     inputElement.setAttribute('value', rules.default);
                 }
+
+                // Add validation data to the input element for validation purposes
+                if (rules.validation) {
+                    inputElement.setAttribute('data-validations', JSON.stringify(rules.validation));
+                }
+
+                // Attach the input change listener for validation
+                inputElement.addEventListener('change', (event) => {
+                    validateInput(field, inputElement.value, rules.validation);
+                });
             }
 
             // Add 'required' attribute if the field is marked as required
@@ -138,7 +148,13 @@ async function populateConfigTemplate() {
                 addButton.addEventListener('click', () => {
                     const newInputElement = inputElement.cloneNode();
                     newInputElement.value = '';  // Clear the value for the new input
+                    newInputElement.setAttribute('name', `${field}[]`);  // Set name as an array for multiple values
                     fieldContainer.insertBefore(newInputElement, addButton);
+
+                    // Attach validation event to the new input
+                    newInputElement.addEventListener('change', (event) => {
+                        validateInput(field, newInputElement.value, rules.validation);
+                    });
                 });
             }
 
