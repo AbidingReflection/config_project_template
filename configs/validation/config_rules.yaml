@@ -5,43 +5,18 @@ authentication_path:
     - validate_str_is_valid_path
   tags:
     - authentication_file_lookup
+  section: qTest Details
+  section_order: 1
+
 
 qTest_domain:
   required: true
   validation:
     - validate_https_url
   default: "https://"
+  section: qTest Details
+  section_order: 2
 
-max_concurrent_requests:
-  required: true
-  validation:
-    - validate_int_range:
-        min_value: 1
-        max_value: 10
-  default: 5
-
-output_filetype:
-  required: true
-  validation:
-    - validate_option:
-        allowed_values:
-          - sqlite
-          - excel
-          - csv
-
-retry_attempts:
-  required: false
-  validation:
-    - validate_int_range:
-        lower_limit: 0
-        upper_limit: 10
-  default: 0
-
-log_name_prefix:
-  required: false
-  validation:
-    - validate_log_prefix
-  default: "qTest_export_"
 
 target_projects:
   required: true
@@ -51,6 +26,30 @@ target_projects:
         digits: 6
   tags:
     - accept_multiple_values
+  section: qTest Details
+  section_order: 3
+
+
+output_filetype:
+  required: true
+  validation:
+    - validate_option:
+        allowed_values:
+          - sqlite
+          - excel
+          - csv
+  section: Output Settings
+  section_order: 1
+
+
+log_name_prefix:
+  required: false
+  validation:
+    - validate_log_prefix
+  default: "qTest_export_"
+  section: Output Settings
+  section_order: 2
+
 
 include_config_rules_in_output:
   required: false
@@ -60,3 +59,26 @@ include_config_rules_in_output:
           - true
           - false
   default: "false"
+  section: Output Settings
+  section_order: 3
+
+  max_concurrent_requests:
+  required: true
+  validation:
+    - validate_int_range:
+        min_value: 1
+        max_value: 10
+  default: 5
+  section: Request Settings
+  section_order: 1
+
+
+retry_attempts:
+  required: false
+  validation:
+    - validate_int_range:
+        lower_limit: 0
+        upper_limit: 10
+  default: "0"
+  section: Request Settings
+  section_order: 2

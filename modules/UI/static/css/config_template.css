@@ -1,0 +1,50 @@
+/* Styling for section containers */
+.section-container {
+    padding: 10px;       /* Reduced padding */
+    background-color: #2b2b2b;
+    border: 1px solid #444;
+    border-radius: 5px;
+}
+
+/* Section title styling */
+.section-container h2 {
+    color: #e7e6e4;            /* Light text color for section titles */
+    font-size: 1.2em;           /* Reduced font size */
+    border-bottom: 1px solid #555;
+    padding-bottom: 5px;
+    margin-bottom: 10px;        /* Reduced margin */
+}
+
+/* General form input and layout tweaks */
+.field-container {
+    margin-bottom: 15px;        /* Slightly smaller margin between fields */
+}
+
+/* Labels and inputs */
+.field-container label {
+    font-size: 0.9em;           /* Slightly smaller font for labels */
+    margin-bottom: 5px;
+}
+
+.field-container input,
+.field-container select {
+    padding: 6px;               /* Slightly reduced padding */
+    font-size: 0.95em;           /* Slightly smaller font for inputs */
+    width: 100%;
+    background-color: #333;      /* Dark background for inputs */
+    border: 1px solid #555;      /* Darker border */
+    color: #e7e6e4;             /* Light text for inputs */
+    border-radius: 3px;
+}
+
+h2 {
+    margin-bottom: 10px;
+    margin-top: 0px;
+}
+
+
+hr {
+    border: none;
+    width: 100%;
+}
+

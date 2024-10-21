@@ -3,22 +3,62 @@ html, body {
     background-color: #191a1a; /* Dark background */
     color: #e7e6e4;            /* Light text color */
     border-color: #706b64;      /* Border color */
+    margin: 0;                  /* Remove default margin */
+    height: 100vh;              /* Full viewport height */
+    overflow: hidden;           /* Prevent body scrolling */
+    font-family: 'Roboto', Arial, sans-serif; /* Updated font */
+}
+
+/* Sticky h1 styling */
+h1 {
+    font-size: 1.5em;            /* Slightly smaller font size */
+    padding: 10px 0;             /* Add some padding for spacing */
+    color: #e7e6e4;              /* Light text color */
+    background-color: #1f1f1f;   /* Same background as the form/content */
+    position: sticky;            /* Sticky positioning */
+    top: 0;                      /* Sticks to the top of the content area */
+    z-index: 10;                 /* Ensure it stays on top of other content */
+    border-bottom: 1px solid #444; /* Optional: Add a subtle bottom border */
+    margin: 0;                   /* Remove extra margins */
+    width: 100%;                 /* Make sure it spans the full content width */
+    text-align: center;          /* Center the heading */
 }
 
 /* Styling for the main container */
 .container {
     display: flex;
+    flex-direction: row;
+    height: 100vh;               /* Full viewport height */
+    overflow: hidden;            /* Prevent scrolling on the container itself */
+}
+
+/* Left navigation styling */
+.left-nav {
+    width: 200px;
+    padding: 20px;
+    background-color: #222222;   /* Dark background for sidebar */
+    color: #e7e6e4;              /* Light text color for sidebar */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;      /* Include padding in width/height calculation */
+    border-right: 1px solid #706b64;
+    position: sticky;            /* Makes the nav sticky */
+    top: 0;                      /* Sticks to the top */
+    height: 100vh;               /* Ensures it spans the full height of the viewport */
+    overflow-y: auto;            /* Allows the nav bar content to scroll if it overflows */
 }
 
 /* Styling for the content area */
 .content {
     flex-grow: 1;
-    padding: 20px;
-    background-color: #191a1a; /* Dark background for content */
-    color: #e7e6e4;            /* Light text color for content */
+    background-color: #191a1a;   /* Dark background for content */
+    color: #e7e6e4;              /* Light text color for content */
     display: flex;
     flex-direction: column;
-    align-items: flex-start;    /* Align content to the left */
+    align-items: flex-start;     /* Align content to the left */
+    overflow-y: auto;            /* Enables scrolling for the content area */
+    max-height: 100vh;           /* Full height of the viewport */
+    box-sizing: border-box;      /* Include padding and borders in the height calculation */
 }
 
 /* Styling for the form container */
@@ -26,13 +66,13 @@ form {
     display: flex;
     flex-direction: column;
     max-width: 600px;
-    width: 100%;               /* Make form take the available width */
-    padding: 20px;
-    background-color: #1f1f1f;  /* Dark background for form */
-    border: 1px solid #706b64;  /* Updated border color to match dark theme */
-    border-radius: 5px;
-    color: #e7e6e4;             /* Light text color for the form */
-    margin-right: auto;         /* Hug the left */
+    width: 100%;                 /* Make form take the available width */
+    padding: 10px;
+    background-color: #1f1f1f;    /* Dark background for form */
+    border: 1px solid #706b64;    /* Updated border color to match dark theme */
+    color: #e7e6e4;               /* Light text color for the form */
+    margin-right: auto;           /* Hug the left */
+    box-sizing: border-box;       /* Ensures padding and border are included in the width */
 }
 
 /* Styling for each label/input pair */
@@ -40,13 +80,15 @@ form {
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
+    padding: 0 10px;              /* Adds padding to avoid inputs touching edges */
+    box-sizing: border-box;       /* Ensures padding is within container */
 }
 
 /* Styling for the labels */
 .field-container label {
     font-weight: bold;
     margin-bottom: 5px;
-    color: #e7e6e4; /* Light text color for labels */
+    color: #e7e6e4;               /* Light text color for labels */
 }
 
 /* Styling for inputs (text inputs, dropdowns) */
@@ -54,17 +96,20 @@ form {
 .field-container select {
     padding: 8px;
     font-size: 1em;
-    border: 1px solid #555; /* Darker border for inputs */
-    background-color: #333; /* Dark background for inputs */
-    color: #e7e6e4;         /* Light text color for inputs */
+    border: 1px solid #555;        /* Darker border for inputs */
+    background-color: #333;        /* Dark background for inputs */
+    color: #e7e6e4;                /* Light text color for inputs */
     border-radius: 4px;
+    width: 100%;                   /* Ensures the input fits within the container */
+    box-sizing: border-box;        /* Ensures padding is within width */
+    max-width: 100%;               /* Prevents inputs from overflowing the container */
 }
 
 /* Styling for inputs on focus */
 .field-container input:focus,
 .field-container select:focus {
     outline: none;
-    border-color: #4CAF50;  /* Green border on focus */
+    border-color: #4CAF50;         /* Green border on focus */
 }
 
 /* Button styling */
@@ -72,7 +117,7 @@ button {
     padding: 10px 20px;
     font-size: 1em;
     background-color: #4CAF50;
-    color: #e7e6e4; /* Light text color for button */
+    color: #e7e6e4;                /* Light text color for button */
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -87,12 +132,4 @@ button:disabled {
     background-color: #555;
     color: #aaa;
     cursor: not-allowed;
-}
-
-/* Sidebar navigation */
-.left-nav {
-    width: 200px;
-    background-color: #2d2d2d;
-    padding: 20px;
-    border-right: 1px solid #706b64;
 }
