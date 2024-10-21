@@ -24,6 +24,7 @@ target_projects:
     - validate_int_list
     - validate_int_list_digits:
         digits: 6
+  default: "127263"
   tags:
     - accept_multiple_values
   section: qTest Details

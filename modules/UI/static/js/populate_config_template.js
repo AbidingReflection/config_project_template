@@ -126,9 +126,24 @@ async function populateConfigTemplate() {
             fieldContainer.appendChild(label);
             fieldContainer.appendChild(inputElement);
 
+            // Check for "accept_multiple_values" tag and add a "+" button
+            if (rules.tags && rules.tags.includes("accept_multiple_values")) {
+                const addButton = document.createElement('button');
+                addButton.type = 'button';
+                addButton.textContent = '+';
+                addButton.classList.add('add-input-button');
+                fieldContainer.appendChild(addButton);
+
+                // Add event listener to dynamically add input fields
+                addButton.addEventListener('click', () => {
+                    const newInputElement = inputElement.cloneNode();
+                    newInputElement.value = '';  // Clear the value for the new input
+                    fieldContainer.insertBefore(newInputElement, addButton);
+                });
+            }
+
             // Append the field container to the section container
             sectionContainer.appendChild(fieldContainer);
-            // sectionContainer.appendChild(document.createElement('br'));  // Line break for spacing
         }
 
         // Append the section container to the form
