@@ -2,6 +2,7 @@ body {
     margin: 0; /* Remove default margin */
     height: 100vh; /* Ensure the body takes up the full viewport height */
     overflow: auto; /* Allow scrolling on body if needed */
+    font-family: 'Roboto', Arial, sans-serif; /* Consistent font across the application */
 }
 
 /* Container for the navigation and content */
@@ -16,16 +17,17 @@ body {
 .left-nav {
     width: 200px;
     padding: 20px;
-    background-color: #222222; /* Dark background for sidebar */
+    background-color: #1f1f1f; /* Dark background for sidebar to match other elements */
     color: #e7e6e4; /* Light text color for sidebar */
     display: flex;
     flex-direction: column;
     box-sizing: border-box; /* Include padding in width/height calculation */
-    border-right: 1px solid #706b64;
+    border-right: 1px solid #706b64; /* Consistent border color */
     position: sticky; /* Makes the nav sticky */
     top: 0; /* Sticks to the top */
     height: 100vh; /* Ensures it spans the full height of the viewport */
     overflow-y: auto; /* Allows the nav bar content to scroll if it overflows */
+    font-family: 'Roboto', Arial, sans-serif; /* Consistent font */
 }
 
 /* Remove default list styling */
@@ -48,17 +50,26 @@ body {
 .nav-button {
     display: block;
     padding: 10px 20px;
-    background-color: #007bff; /* Blue button background */
+    background-color: #333; /* Darker background for consistency with form inputs */
     color: #e7e6e4; /* Light text color for buttons */
     text-align: center;
     text-decoration: none;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 1em; /* Standardized font size */
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    border: 1px solid #444; /* Match with the rest of the theme */
 }
 
+/* Hover state for buttons */
 .nav-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #4CAF50; /* Green hover effect to match the rest of the UI */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
 }
 
+/* Active button styling */
+.nav-button.active {
+    background-color: #4CAF50; /* Same active state as the form buttons */
+    color: #fff; /* White text for active state */
+}
