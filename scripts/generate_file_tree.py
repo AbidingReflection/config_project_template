@@ -1,87 +1,117 @@
 import os
 import re
 from datetime import datetime, timezone
+from pathlib import Path
+from typing import List, Dict
 
-def extract_number(entry):
+def extract_number(entry: str) -> int:
     """Extract leading number for sorting, default to infinity if none found."""
     match = re.match(r'^(\d+)', entry)
-    if match:
-        return int(match.group(1))
-    return float('inf')
+    return int(match.group(1)) if match else float('inf')
 
-def delete_existing_file_trees(output_prefix):
-    """Delete existing file trees matching the output_path prefix."""
-    directory = os.path.dirname(output_prefix) or "."
-    for file_name in os.listdir(directory):
-        if file_name.startswith(os.path.basename(output_prefix)) and file_name.endswith('.txt'):
-            file_path = os.path.join(directory, file_name)
-            try:
-                os.remove(file_path)
-                print(f"Deleted existing file: {file_path}")
-            except OSError as e:
-                print(f"Error deleting file {file_path}: {e}")
-
-def generate_file_tree(target_path, output_path, exclude_prefixes=None, exclude_suffixes=None, exclude_filetypes=None, exclude_folders=None, delete_existing=False):
-    """Generate file tree for target_path and output results to output_path."""
-    exclude_prefixes = exclude_prefixes or []
-    exclude_suffixes = exclude_suffixes or []
-    exclude_filetypes = exclude_filetypes or []
-    exclude_folders = exclude_folders or []
-
-    if delete_existing:
-        delete_existing_file_trees(output_path)
+def archive_existing_file_trees(output_prefix: Path) -> None:
+    """Archive existing file trees by moving them to an 'archive' folder."""
+    archive_dir = output_prefix.parent / 'archive'
+    archive_dir.mkdir(exist_ok=True)
     
+    for file_path in output_prefix.parent.glob(f"{output_prefix.stem}*.txt"):
+        try:
+            archived_file_path = archive_dir / file_path.name
+            file_path.rename(archived_file_path)
+            print(f"Archived existing file: {file_path} -> {archived_file_path}")
+        except OSError as e:
+            print(f"Error archiving file {file_path}: {e}")
+
+class ExclusionFilter:
+    """Callable class to filter out files and directories based on exclusion rules."""
+    def __init__(self, prefixes: List[str], suffixes: List[str], filetypes: List[str], folders: List[str]):
+        self.prefixes = prefixes
+        self.suffixes = suffixes
+        self.filetypes = filetypes
+        self.folders = folders
+
+    def __call__(self, entry: Path) -> bool:
+        return (
+            any(entry.name.startswith(prefix) for prefix in self.prefixes) or
+            any(entry.name.endswith(suffix) for suffix in self.suffixes) or
+            entry.suffix in self.filetypes or
+            entry.name in self.folders
+        )
+
+def format_exclusions(exclude_config: Dict[str, List[str]]) -> str:
+    """Format exclusions for output file."""
+    formatted_exclusions = "Exclusions:\n"
+    for key, values in exclude_config.items():
+        formatted_exclusions += f"  {key.capitalize()}:\n"
+        if values:
+            for value in values:
+                formatted_exclusions += f"    - {value}\n"
+        else:
+            formatted_exclusions += "    - None\n"
+    return formatted_exclusions
+
+def generate_file_tree(
+    target_path: Path, 
+    output_path: Path, 
+    exclude_config: Dict[str, List[str]], 
+    archive_previous: bool = True
+) -> None:
+    """Generate a file tree for target_path and save to output_path."""
+    
+    exclude_filter = ExclusionFilter(
+        exclude_config.get("prefixes", []),
+        exclude_config.get("suffixes", []),
+        exclude_config.get("filetypes", []),
+        exclude_config.get("folders", [])
+    )
+
+    # Archive existing file trees if enabled
+    if archive_previous:
+        archive_existing_file_trees(output_path)
+
     timestamp = datetime.now(timezone.utc).strftime('%y%m%dZ%H%M%S')
     output_file = f"{output_path}_{timestamp}.txt"
-    
+
     with open(output_file, 'w', encoding='utf-8') as file:
+        # Write header paths
         file.write(f"Target Path: {target_path}\n")
-        file.write(f"Output Path: {output_file}\n")
-        file.write(f"Exclude Prefixes: {', '.join([f'\'{prefix}\'' for prefix in exclude_prefixes])}\n")
-        file.write(f"Exclude Suffixes: {', '.join([f'\'{suffix}\'' for suffix in exclude_suffixes])}\n")
-        file.write(f"Exclude Filetypes: {', '.join([f'\'{filetype}\'' for filetype in exclude_filetypes])}\n")
-        file.write(f"Exclude Folders: {', '.join([f'\'{folder}\'' for folder in exclude_folders])}\n\n")
+        file.write(f"Output Path: {output_file}\n\n")
         
-        file.write(f"{os.path.basename(target_path)}/\n")
-        
-        def walk_directory(current_path, prefix="│   "):
+        # Write the root target directory
+        file.write(f"{target_path.name}/\n")
+
+        def walk_directory(current_path: Path, prefix: str = "│   "):
             try:
-                entries = sorted(os.listdir(current_path), key=lambda entry: (extract_number(entry), entry))
-                entries = [e for e in entries if os.path.basename(e) not in exclude_folders]
-                
+                entries = sorted(current_path.iterdir(), key=lambda entry: (extract_number(entry.name), entry.name))
+                entries = [entry for entry in entries if not exclude_filter(entry)]
+
                 for i, entry in enumerate(entries):
-                    full_path = os.path.join(current_path, entry)
                     connector = "└──" if i == len(entries) - 1 else "├──"
-                    if os.path.isdir(full_path):
-                        file.write(f"{prefix}{connector} {entry}/\n")
-                        new_prefix = prefix + ("    " if connector == "└──" else "│   ")
-                        walk_directory(full_path, new_prefix)
+                    if entry.is_dir():
+                        file.write(f"{prefix}{connector} {entry.name}/\n")
+                        walk_directory(entry, prefix + ("    " if connector == "└──" else "│   "))
                     else:
-                        if any(entry.startswith(p) for p in exclude_prefixes):
-                            continue
-                        if any(entry.endswith(s) for s in exclude_suffixes):
-                            continue
-                        if any(entry.endswith(ft) for ft in exclude_filetypes):
-                            continue
-                        file.write(f"{prefix}{connector} {entry}\n")
-            except PermissionError:
-                connector = "└──" if prefix.endswith("└──") else "├──"
-                file.write(f"{prefix}{connector} [Permission Denied]\n")
+                        file.write(f"{prefix}{connector} {entry.name}\n")
+            except PermissionError as e:
+                file.write(f"{prefix}└── [Permission Denied: {current_path}]\n")
 
+        # Walk the directory and write the file tree structure
         walk_directory(target_path)
+        
+        # Write exclusions after the file tree
+        file.write("\n" + format_exclusions(exclude_config))
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-target_path = os.path.abspath(os.path.join(current_dir, os.pardir))
+if __name__ == "__main__":
+    current_dir = Path(__file__).resolve().parent
+    target_path = current_dir.parent
+    output_dir = current_dir / 'output'
+    output_dir.mkdir(exist_ok=True)
 
-output_dir = os.path.join(current_dir, 'output')
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+    exclude_config = {
+        "prefixes": ["file_tree_"],
+        "suffixes": [],
+        "filetypes": [],
+        "folders": ['.git', 'venv', "__pycache__", "logs", ".pytest_cache"]
+    }
 
-output_file_name = os.path.join(output_dir, 'file_tree')
-
-exclude_prefixes = ["file_tree_"]
-exclude_suffixes = []
-exclude_filetypes = []
-exclude_folders = ['.git', 'venv', "__pycache__", "logs", ".pytest_cache"]
-
-generate_file_tree(target_path, output_file_name, exclude_prefixes, exclude_suffixes, exclude_filetypes, exclude_folders, delete_existing=True)
+    generate_file_tree(target_path, output_dir / 'file_tree', exclude_config, archive_previous=True)
