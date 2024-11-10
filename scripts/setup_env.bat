@@ -2,24 +2,24 @@
 setlocal
 
 :: Get the directory where the batch script is located
-set SCRIPT_DIR=%~dp0
+set "SCRIPT_DIR=%~dp0"
 
-@REM :: Set the certificate path variable to the project directory
-@REM set CERT_PATH=%SCRIPT_DIR%\resources\tls-ca-bundle.pem
+@REM Set the certificate path variable to the project directory (uncomment if needed)
+@REM set "CERT_PATH=%SCRIPT_DIR%resources\tls-ca-bundle.pem"
 
-@REM :: Check if the certificate exists
-@REM if not exist "%CERT_PATH%" (
-@REM     echo Certificate not found at %CERT_PATH%. Please ensure the certificate is in the correct location.
-@REM     exit /b 1
-@REM )
+:: Check for 'UI' argument to select the appropriate requirements file
+set "REQUIREMENTS_FILE=requirements.txt"
+if /I "%1"=="UI" (
+    set "REQUIREMENTS_FILE=requirements_UI.txt"
+)
 
-:: Check if requirements.txt exists
-if not exist "%SCRIPT_DIR%..\requirements.txt" (
-    echo requirements.txt file not found. Please ensure it exists in the correct directory.
+:: Verify that the chosen requirements file exists
+if not exist "%SCRIPT_DIR%..\%REQUIREMENTS_FILE%" (
+    echo %REQUIREMENTS_FILE% not found. Please ensure it exists in the correct directory.
     exit /b 1
 )
 
-:: Check if venv exists, if not create it
+:: Check if virtual environment exists, if not create it
 if not exist "%SCRIPT_DIR%..\venv" (
     echo Creating virtual environment...
     python -m venv "%SCRIPT_DIR%..\venv"
@@ -29,9 +29,19 @@ if not exist "%SCRIPT_DIR%..\venv" (
 echo Activating virtual environment...
 call "%SCRIPT_DIR%..\venv\Scripts\activate"
 
-:: Install dependencies using the certificate
-echo Installing dependencies with certificate...
-pip install --cert "%CERT_PATH%" -r "%SCRIPT_DIR%..\requirements.txt"
+:: Install dependencies, with certificate if CERT_PATH is defined
+echo Installing dependencies from %REQUIREMENTS_FILE%...
+if defined CERT_PATH (
+    echo Using certificate at %CERT_PATH%
+    pip install --cert "%CERT_PATH%" -r "%SCRIPT_DIR%..\%REQUIREMENTS_FILE%"
+) else (
+    pip install -r "%SCRIPT_DIR%..\%REQUIREMENTS_FILE%"
+)
+
+if errorlevel 1 (
+    echo Failed to install dependencies. Please check the certificate or internet connection.
+    exit /b 1
+)
 
 echo Environment setup complete!
 endlocal
