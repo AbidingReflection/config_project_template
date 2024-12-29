@@ -1,5 +1,3 @@
-from modules.config_tools.config_loader import ConfigLoader
-from modules.config_tools.utils import  CustomJSONEncoder
-import json
+from modules.config_loader import ConfigLoader
 
-CONFIG = ConfigLoader(r"configs\example.yaml").get_config()
+CONFIG = ConfigLoader(r"configs\example.yaml").config
